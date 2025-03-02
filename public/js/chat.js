@@ -21,27 +21,22 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 const autoScroll = () => {
-  // New message element
   const $newMessage = $messages.lastElementChild;
+  if (!$newMessage) return;
 
-  // hight of the new message
   const newMessageStyle = getComputedStyle($newMessage);
   const newMessageMargin = parseInt(newMessageStyle.marginBottom);
   const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
 
-  // visible height
   const visibleHeight = $messages.offsetHeight;
-
-  // height of messages container
   const containerHeight = $messages.scrollHeight;
-
-  // how far have I scrolled?
   const scrollOffset = $messages.scrollTop + visibleHeight;
 
   if (containerHeight - newMessageHeight <= scrollOffset) {
-    $messages.scrollTop = $messages.scrollHeight;
+    $messages.scrollTop = containerHeight;
   }
 };
+
 
 // server (emit) -> client (receive) - countUpdated
 // client (emit) -> server (receive) - increment
@@ -76,50 +71,92 @@ socket.on("roomData", ({ room, users }) => {
   document.querySelector("#sidebar").innerHTML = html;
 });
 
-$messageForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+// $messageForm.addEventListener("submit", (e) => {
+//   e.preventDefault();
 
-  // disable form after submit
+//   // disable form after submit
+//   $messageFormButton.setAttribute("disabled", "disabled");
+
+//   //disable
+
+//   const message = $messageFormInput.value;
+
+//   if (message === "") {
+//     // enable form after submit
+//     $messageFormButton.removeAttribute("disabled");
+//     return;
+//   }
+//   socket.emit("sendMessage", message, (error) => {
+//     // enable form after submit
+//     $messageFormButton.removeAttribute("disabled");
+//     // clear input
+//     $messageFormInput.value = "";
+//     // focus input
+//     $messageFormInput.focus();
+//     if (error) {
+//       return console.log(error);
+//     }
+//     // console.log("Message Delivered");
+//   });
+// });
+
+$messageForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
   $messageFormButton.setAttribute("disabled", "disabled");
 
-  //disable
-
-  const message = $messageFormInput.value;
-
+  const message = $messageFormInput.value.trim();
   if (message === "") {
-    // enable form after submit
     $messageFormButton.removeAttribute("disabled");
     return;
   }
-  socket.emit("sendMessage", message, (error) => {
-    // enable form after submit
-    $messageFormButton.removeAttribute("disabled");
-    // clear input
-    $messageFormInput.value = "";
-    // focus input
-    $messageFormInput.focus();
-    if (error) {
-      return console.log(error);
+
+  try {
+    const response = await fetch("http://localhost:5000/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: message })
+    });
+
+    let translatedMessage = message;
+    if (response.ok) {
+      const data = await response.json();
+      translatedMessage = data.contents?.translated || message;
+    } else {
+      console.warn("Translation API failed. Sending original message.");
     }
-    // console.log("Message Delivered");
-  });
+
+    socket.emit("sendMessage", translatedMessage, (error) => {
+      $messageFormButton.removeAttribute("disabled");
+      $messageFormInput.value = "";
+      $messageFormInput.focus();
+      if (error) console.log(error);
+    });
+
+  } catch (error) {
+    console.error("Translation API error:", error);
+    socket.emit("sendMessage", message); // Fallback to original message
+    $messageFormButton.removeAttribute("disabled");
+  }
 });
+
 
 document.querySelector("#send-location").addEventListener("click", (e) => {
   e.preventDefault();
+  const $sendLocationButton = document.querySelector("#send-location"); // Ensure it's defined inside the scope
+
   if (!navigator.geolocation) {
     return alert("Geolocation is not supported by your browser");
   }
 
-  navigator.permissions.query({ name: "geolocation" }).then((res) => {
-    // console.log(res);
+  navigator.permissions?.query({ name: "geolocation" }).then((res) => {
     if (res.state === "denied") {
       return alert("Please allow permission to send location!");
     }
+  }).catch(() => {
+    console.warn("Geolocation permission check failed. Proceeding...");
   });
 
   navigator.geolocation.getCurrentPosition((position) => {
-    // console.log(position);
     $sendLocationButton.setAttribute("disabled", "disabled");
 
     socket.emit(
@@ -130,9 +167,10 @@ document.querySelector("#send-location").addEventListener("click", (e) => {
       },
       () => {
         $sendLocationButton.removeAttribute("disabled");
-        // console.log("Location Shared");
       }
     );
+  }, (error) => {
+    alert(`Error getting location: ${error.message}`);
   });
 });
 
