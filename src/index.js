@@ -96,8 +96,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ Use dynamic PORT for Render Deployment
-const port = process.env.PORT || 5000;
+// ✅ Set PORT to 3000
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
 });
