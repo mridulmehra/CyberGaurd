@@ -8,11 +8,8 @@ const $sendLocationButton = document.querySelector("#send-location");
 const $messages = document.querySelector("#messages");
 
 // Templates
-
 const messageTemplate = document.querySelector("#message-template").innerHTML;
-const locationTemplate = document.querySelector(
-  "#locmessage-template"
-).innerHTML;
+const locationTemplate = document.querySelector("#locmessage-template").innerHTML;
 const sidebarTemplate = document.querySelector("#sidebar-template").innerHTML;
 
 // Options
@@ -37,12 +34,8 @@ const autoScroll = () => {
   }
 };
 
-
-// server (emit) -> client (receive) - countUpdated
-// client (emit) -> server (receive) - increment
-
+// Receive Messages
 socket.on("message", (message) => {
-  // console.log(message);
   const html = Mustache.render(messageTemplate, {
     username: message.username,
     message: message.text,
@@ -53,7 +46,6 @@ socket.on("message", (message) => {
 });
 
 socket.on("locationMessage", (url) => {
-  // console.log(url.username);
   const html = Mustache.render(locationTemplate, {
     username: url.username,
     url: url.url,
@@ -71,35 +63,7 @@ socket.on("roomData", ({ room, users }) => {
   document.querySelector("#sidebar").innerHTML = html;
 });
 
-// $messageForm.addEventListener("submit", (e) => {
-//   e.preventDefault();
-
-//   // disable form after submit
-//   $messageFormButton.setAttribute("disabled", "disabled");
-
-//   //disable
-
-//   const message = $messageFormInput.value;
-
-//   if (message === "") {
-//     // enable form after submit
-//     $messageFormButton.removeAttribute("disabled");
-//     return;
-//   }
-//   socket.emit("sendMessage", message, (error) => {
-//     // enable form after submit
-//     $messageFormButton.removeAttribute("disabled");
-//     // clear input
-//     $messageFormInput.value = "";
-//     // focus input
-//     $messageFormInput.focus();
-//     if (error) {
-//       return console.log(error);
-//     }
-//     // console.log("Message Delivered");
-//   });
-// });
-
+// Message Sending
 $messageForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   $messageFormButton.setAttribute("disabled", "disabled");
@@ -111,10 +75,11 @@ $messageForm.addEventListener("submit", async (e) => {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/translate", {
+    console.log("Sending message to translation API...");
+    const response = await fetch("/translate", { // ✅ Changed from localhost to relative path
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: message })
+      body: JSON.stringify({ text: message }),
     });
 
     let translatedMessage = message;
@@ -134,15 +99,14 @@ $messageForm.addEventListener("submit", async (e) => {
 
   } catch (error) {
     console.error("Translation API error:", error);
-    socket.emit("sendMessage", message); // Fallback to original message
+    socket.emit("sendMessage", message);
     $messageFormButton.removeAttribute("disabled");
   }
 });
 
-
+// Location Sharing
 document.querySelector("#send-location").addEventListener("click", (e) => {
   e.preventDefault();
-  const $sendLocationButton = document.querySelector("#send-location"); // Ensure it's defined inside the scope
 
   if (!navigator.geolocation) {
     return alert("Geolocation is not supported by your browser");
@@ -174,14 +138,10 @@ document.querySelector("#send-location").addEventListener("click", (e) => {
   });
 });
 
+// Join Room
 socket.emit("join", { username, room }, (error) => {
   if (error) {
     alert(error);
     location.href = "/";
   }
 });
-
-// document.querySelector("#increment").addEventListener("click", (e) => {
-//   console.log("clicked");
-//   socket.emit("increment");
-// });
