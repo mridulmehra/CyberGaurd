@@ -76,7 +76,7 @@ $messageForm.addEventListener("submit", async (e) => {
 
   try {
     console.log("Sending message to translation API...");
-    const response = await fetch("/translate", { // ✅ Changed from localhost to relative path
+    const response = await fetch("/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: message }),
@@ -89,19 +89,17 @@ $messageForm.addEventListener("submit", async (e) => {
     } else {
       console.warn("Translation API failed. Sending original message.");
     }
-
-    socket.emit("sendMessage", translatedMessage, (error) => {
-      $messageFormButton.removeAttribute("disabled");
-      $messageFormInput.value = "";
-      $messageFormInput.focus();
-      if (error) console.log(error);
-    });
-
   } catch (error) {
     console.error("Translation API error:", error);
-    socket.emit("sendMessage", message);
-    $messageFormButton.removeAttribute("disabled");
   }
+
+  // Ensure message is sent even if translation fails
+  socket.emit("sendMessage", translatedMessage || message, (error) => {
+    $messageFormButton.removeAttribute("disabled");
+    $messageFormInput.value = "";
+    $messageFormInput.focus();
+    if (error) console.log(error);
+  });
 });
 
 // Location Sharing
@@ -112,13 +110,17 @@ document.querySelector("#send-location").addEventListener("click", (e) => {
     return alert("Geolocation is not supported by your browser");
   }
 
-  navigator.permissions?.query({ name: "geolocation" }).then((res) => {
-    if (res.state === "denied") {
-      return alert("Please allow permission to send location!");
-    }
-  }).catch(() => {
-    console.warn("Geolocation permission check failed. Proceeding...");
-  });
+  try {
+    navigator.permissions?.query({ name: "geolocation" }).then((res) => {
+      if (res.state === "denied") {
+        return alert("Please allow permission to send location!");
+      }
+    }).catch(() => {
+      console.warn("Geolocation permission check failed. Proceeding...");
+    });
+  } catch (error) {
+    console.warn("Geolocation permission query not supported");
+  }
 
   navigator.geolocation.getCurrentPosition((position) => {
     $sendLocationButton.setAttribute("disabled", "disabled");
@@ -137,6 +139,7 @@ document.querySelector("#send-location").addEventListener("click", (e) => {
     alert(`Error getting location: ${error.message}`);
   });
 });
+
 
 // Join Room
 socket.emit("join", { username, room }, (error) => {
