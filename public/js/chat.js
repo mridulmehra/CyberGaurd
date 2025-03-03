@@ -74,6 +74,8 @@ $messageForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  let translatedMessage = message; // Declare it outside try-catch
+
   try {
     console.log("Sending message to translation API...");
     const response = await fetch("/translate", {
@@ -82,7 +84,6 @@ $messageForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ text: message }),
     });
 
-    let translatedMessage = message;
     if (response.ok) {
       const data = await response.json();
       translatedMessage = data.contents?.translated || message;
@@ -94,13 +95,14 @@ $messageForm.addEventListener("submit", async (e) => {
   }
 
   // Ensure message is sent even if translation fails
-  socket.emit("sendMessage", translatedMessage || message, (error) => {
+  socket.emit("sendMessage", translatedMessage, (error) => {
     $messageFormButton.removeAttribute("disabled");
     $messageFormInput.value = "";
     $messageFormInput.focus();
     if (error) console.log(error);
   });
 });
+
 
 // Location Sharing
 document.querySelector("#send-location").addEventListener("click", (e) => {
