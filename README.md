@@ -45,6 +45,8 @@ nodemon src/index.js or node src/index.js
 2. Choose a chat room to join.
 3. Start chatting with other users in real-time.
 
+Hosted Link : https://cybergaurd.onrender.com
+
 ## File Structure
 - **src/index.js**: The main server file that handles WebSocket connections and serves the HTML page.
 - **public/index.html**: The HTML template for the chat application.
