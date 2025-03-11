@@ -1,31 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
+    <title>Join Room - CyberGuard</title>
     <link rel="icon" href="./img/favicon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-800 flex items-center justify-center min-h-screen">
 
-    <div class="bg-white shadow-lg rounded-lg p-8 w-80">
-        <h1 class="text-2xl font-bold text-center mb-6 text-gray-700">Join Room</h1>
+    <!-- Rubik Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config to Add Rubik -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rubik', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366F1', // indigo-500
+                        secondary: '#8B5CF6', // purple-500
+                        dark: '#1F2937', // gray-800
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 min-h-screen flex items-center justify-center font-sans">
+
+    <!-- Card Container -->
+    <div class="bg-white bg-opacity-90 backdrop-blur-md shadow-2xl rounded-2xl p-8 w-96 space-y-6 border border-gray-200">
+        <h1 class="text-3xl font-bold text-center text-gray-800">Join a Chat Room</h1>
+        <p class="text-center text-gray-600">Connect & chat in real-time</p>
+
+        <!-- Join Room Form -->
         <form action="./chat.html" class="space-y-4">
+            <!-- Display Name -->
             <div>
-                <label class="block text-gray-600 mb-1">Display Name</label>
-                <input type="text" name="username" required
-                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300">
+                <label class="block text-gray-700 font-medium mb-1">Display Name</label>
+                <input type="text" name="username" placeholder="Enter your name" required
+                    class="w-full border-2 border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition" />
             </div>
+
+            <!-- Room -->
             <div>
-                <label class="block text-gray-600 mb-1">Room</label>
-                <input type="text" name="room" required
-                    class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300">
+                <label class="block text-gray-700 font-medium mb-1">Room Name</label>
+                <input type="text" name="room" placeholder="Enter room name" required
+                    class="w-full border-2 border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition" />
             </div>
+
+            <!-- Join Button -->
             <button type="submit"
-                class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">Join</button>
+                class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-3 rounded-xl hover:from-purple-600 hover:to-indigo-600 shadow-lg transition">
+                Join Room
+            </button>
         </form>
+
+        <!-- Footer / Redirect -->
+        <div class="text-center">
+            <button onclick="window.open('https://mridulmehra.vercel.app/', '_blank')"
+                class="text-indigo-700 underline hover:text-indigo-900 transition">
+                Visit Developer's Socials
+            </button>
+        </div>
     </div>
 
 </body>
+
 </html>
