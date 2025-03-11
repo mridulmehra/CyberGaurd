@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
+    <title>CyberGaurd</title>
     <link rel="icon" href="./img/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,7 +12,7 @@
 <body class="h-screen flex bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500">
 
     <!-- Sidebar -->
-    <div id="sidebar" class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl rounded-r-3xl backdrop-blur-md bg-opacity-70">
+    <div id="sidebar" class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70">
         <h2 class="text-2xl font-extrabold mb-4">Chat Room</h2>
         <div id="sidebar-content" class="space-y-2"></div>
     </div>
@@ -20,12 +20,12 @@
     <!-- Main Chat Area -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
         <!-- Messages -->
-        <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4 backdrop-blur-md bg-white bg-opacity-60 rounded-l-3xl shadow-inner">
+        <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4 backdrop-blur-md bg-white bg-opacity-60 shadow-inner">
             <!-- Dynamic Messages Appear Here -->
         </div>
 
         <!-- Message input -->
-        <div class="flex items-center p-4 bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md rounded-t-3xl">
+        <div class="flex items-center p-4 bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md">
             <form id="message-form" class="flex w-full space-x-3">
                 <input type="text" name="message" placeholder="Type your message..." autocomplete="off"
                     class="flex-1 border-2 border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition" />
@@ -33,7 +33,7 @@
                     class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold px-5 py-2 rounded-full hover:from-purple-600 hover:to-indigo-600 shadow-lg transition">Send</button>
             </form>
             <button id="send-location"
-                class="ml-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-5 py-2 rounded-full hover:from-emerald-600 hover:to-green-600 shadow-lg transition">Location</button>
+                class="ml-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-5 py-2 rounded-full hover:from-emerald-600 hover:to-green-600 shadow-lg transition">Socials</button>
         </div>
     </div>
 
@@ -61,11 +61,11 @@
     </script>
 
     <script id="sidebar-template" type="text/html">
-        <h2 class="text-2xl font-bold mb-4">Room: {{room}}</h2>
+        <h2 class="text-2xl font-bold mb-4 text-center">Room: {{room}}</h2>
         <h3 class="font-semibold mb-2">👥 Users</h3>
         <ul class="space-y-2">
             {{#users}}
-                <li class="bg-gray-700 bg-opacity-50 rounded-lg p-2">{{username}}</li>
+                <li class="bg-gray-700 bg-opacity-50 rounded-lg p-2 pl-4">{{username}}</li>
             {{/users}}
         </ul>
     </script>
