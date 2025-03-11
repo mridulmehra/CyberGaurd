@@ -21,7 +21,7 @@
 
     <!-- Sidebar -->
     <div id="sidebar"
-        class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70 rounded-r-3xl">
+        class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70">
         <h2 class="text-2xl font-extrabold mb-6 text-center tracking-wide">💬 Chat Room</h2>
         <div id="sidebar-content" class="space-y-2 text-sm"></div>
     </div>
@@ -73,10 +73,10 @@
 
     <script id="sidebar-template" type="text/html">
         <h2 class="text-2xl font-bold mb-4 text-center tracking-wider">Room: {{room}}</h2>
-        <h3 class="font-semibold mb-4 text-center text-lg">👥 Users</h3>
+        <h3 class="font-semibold mb-4 text-lg">👥 Users</h3>
         <ul class="space-y-2">
             {{#users}}
-                <li class="bg-gray-700 bg-opacity-50 p-2 pl-2 rounded-lg">{{username}}</li>
+                <li class="bg-gray-700 bg-opacity-50 p-2 pl-4 rounded-lg">{{username}}</li>
             {{/users}}
         </ul>
     </script>
