@@ -6,13 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberGaurd</title>
     <link rel="icon" href="./img/favicon.png">
+    
+    <!-- Rubik Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config to Add Rubik -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rubik', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body class="h-screen flex bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500">
+<body class="h-screen flex bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 font-sans">
 
     <!-- Sidebar -->
-    <div id="sidebar" class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70">
+    <div id="sidebar"
+        class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70">
         <h2 class="text-2xl font-extrabold mb-4">Chat Room</h2>
         <div id="sidebar-content" class="space-y-2"></div>
     </div>
@@ -20,12 +39,14 @@
     <!-- Main Chat Area -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
         <!-- Messages -->
-        <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4 backdrop-blur-md bg-white bg-opacity-60 shadow-inner">
+        <div id="messages"
+            class="flex-1 overflow-y-auto p-6 space-y-4 backdrop-blur-md bg-white bg-opacity-60 shadow-inner">
             <!-- Dynamic Messages Appear Here -->
         </div>
 
         <!-- Message input -->
-        <div class="flex items-center p-4 bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md">
+        <div
+            class="flex items-center p-4 bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md">
             <form id="message-form" class="flex w-full space-x-3">
                 <input type="text" name="message" placeholder="Type your message..." autocomplete="off"
                     class="flex-1 border-2 border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition" />
