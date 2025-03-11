@@ -7,44 +7,75 @@
     <title>Chat App</title>
     <link rel="icon" href="./img/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
 </head>
 
-<body class="h-screen flex bg-gray-100">
+<body class="h-screen flex bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500">
 
     <!-- Sidebar -->
-    <div class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl backdrop-blur-md bg-opacity-70">
-        <h2 class="text-2xl font-bold mb-4 text-center">Room: {{room}}</h2>
-        <h3 class="font-semibold mb-2 text-center">👥 Users</h3>
-        <ul class="space-y-2">
-            {{#users}}
-                <li class="bg-gray-700 bg-opacity-50 p-2 pl-2">{{username}}</li>
-            {{/users}}
-        </ul>
+    <div id="sidebar" class="w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white p-6 space-y-4 shadow-2xl rounded-r-3xl backdrop-blur-md bg-opacity-70">
+        <h2 class="text-2xl font-extrabold mb-4">Chat Room</h2>
+        <div id="sidebar-content" class="space-y-2"></div>
     </div>
 
     <!-- Main Chat Area -->
-    <div class="flex-1 flex flex-col h-screen">
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
         <!-- Messages -->
-        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+        <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4 backdrop-blur-md bg-white bg-opacity-60 rounded-l-3xl shadow-inner">
+            <!-- Dynamic Messages Appear Here -->
+        </div>
 
         <!-- Message input -->
-        <div class="flex items-center p-4 bg-white border-t">
-            <form id="message-form" class="flex w-full space-x-2">
-                <input type="text" name="message" placeholder="Enter message" autocomplete="off"
-                    class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300" />
+        <div class="flex items-center p-4 bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md rounded-t-3xl">
+            <form id="message-form" class="flex w-full space-x-3">
+                <input type="text" name="message" placeholder="Type your message..." autocomplete="off"
+                    class="flex-1 border-2 border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition" />
                 <button type="submit"
-                    class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Send</button>
+                    class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold px-5 py-2 rounded-full hover:from-purple-600 hover:to-indigo-600 shadow-lg transition">Send</button>
             </form>
             <button id="send-location"
-                class="ml-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Location</button>
+                class="ml-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-5 py-2 rounded-full hover:from-emerald-600 hover:to-green-600 shadow-lg transition">Location</button>
         </div>
     </div>
+
+    <!-- Templates -->
+    <script id="message-template" type="text/html">
+        <div class="bg-white bg-opacity-90 p-4 rounded-2xl shadow-lg backdrop-blur-md">
+            <p class="text-gray-800">
+                <span class="font-bold text-indigo-600">{{username}}</span>
+                <span class="text-sm text-gray-400 ml-2">{{createdAt}}</span>
+            </p>
+            <p class="mt-2 text-gray-700">{{message}}</p>
+        </div>
+    </script>
+
+    <script id="locmessage-template" type="text/html">
+        <div class="bg-white bg-opacity-90 p-4 rounded-2xl shadow-lg backdrop-blur-md">
+            <p class="text-gray-800">
+                <span class="font-bold text-indigo-600">{{username}}</span>
+                <span class="text-sm text-gray-400 ml-2">{{createdAt}}</span>
+            </p>
+            <p class="mt-2">
+                <a href="{{url}}" target="_blank" class="text-indigo-700 underline hover:text-indigo-900">📍 My Current Location</a>
+            </p>
+        </div>
+    </script>
+
+    <script id="sidebar-template" type="text/html">
+        <h2 class="text-2xl font-bold mb-4">Room: {{room}}</h2>
+        <h3 class="font-semibold mb-2">👥 Users</h3>
+        <ul class="space-y-2">
+            {{#users}}
+                <li class="bg-gray-700 bg-opacity-50 rounded-lg p-2">{{username}}</li>
+            {{/users}}
+        </ul>
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/chat.js"></script>
 
 </body>
 
