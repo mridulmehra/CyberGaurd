@@ -1,4 +1,9 @@
-const socket = io();
+// const socket = io();
+import { io } from "socket.io-client";
+
+const socket = io("https://cybergaurd-backend.onrender.com", {
+    transports: ["websocket"], // Ensure WebSockets are used
+});
 
 // Elements
 const $messageForm = document.querySelector("#message-form");
